@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SSL/TLS Domain Checker</title>
+    <style>
+        /* Add your custom CSS styles here */
+        /* For example, you can style the headers differently */
+        h2 {
+            margin-top: 20px;
+            color: #007bff; /* Blue color for Category 1 */
+        }
+        h3 {
+            margin-top: 10px;
+            color: #28a745; /* Green color for Category 2 */
+        }
+        h4 {
+            margin-top: 10px;
+            color: #dc3545; /* Red color for Category 3 */
+        }
+    </style>
+</head>
+<body>
+    <h1>SSL/TLS Domain Checker</h1>
+    {% for category, domain_results in results.items() %}
+        <h2>{{ category }}</h2>
+        {% for domain, status in domain_results.items() %}
+            {% if status %}
+                <h3>{{ domain }} is SSL/TLS valid.</h3>
+            {% else %}
+                <h4>{{ domain }} has an SSL/TLS certificate error or inaccessible.</h4>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</body>
+</html>
+

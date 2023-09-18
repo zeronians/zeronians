@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SSL/TLS Domain Checker</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add your custom CSS styles here */
+        /* For example, you can style the headers differently */
+        .category-card {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #dcdcdc;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .valid-domain {
+            color: #28a745;
+        }
+        .invalid-domain {
+            color: #dc3545;
+        }
+    </style>
+<script>
+        function captureScreenshot() {
+            // Capture the full-page screenshot using html2canvas
+            html2canvas(document.body).then(function(canvas) {
+                // Create an "a" element to download the screenshot
+                var link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'screenshot.png';
+                link.click();
+            });
+        }
+
+        function downloadResults() {
+            var resultsText = document.getElementById('results-container').innerText;
+            var blob = new Blob([resultsText], { type: 'text/plain' });
+            var url = URL.createObjectURL(blob);
+
+            // Create an "a" element to download the TXT file
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'results.txt';
+            link.click();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 mb-4">SSL/TLS Domain Checker</h1>
+        {% for category, domain_results in results.items() %}
+        <div class="category-card">
+            <h2>{{ category }}</h2>
+            {% for domain, status in domain_results.items() %}
+                <div class="domain-info">
+                    <p class="{{ 'valid-domain' if status else 'invalid-domain' }}">
+                        {{ domain }}
+                        {% if status %}
+                            is SSL/TLS valid.
+                        {% else %}
+                            has an SSL/TLS certificate error or inaccessible.
+                        {% endif %}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+<div class="buttons">
+        <button onclick="captureScreenshot()">Download Full Screenshot</button>
+        <button onclick="downloadResults()">Download Results as TXT</button>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+</body>
+</html>
